@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # app/services/crumb_kit/session_service.rb
 class SessionService
   def initialize(user)

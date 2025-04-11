@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # lib/crumb_kit/concerns/authentication.rb
 module Authentication
   extend ActiveSupport::Concern
@@ -6,7 +8,7 @@ module Authentication
 
   # Handles the case where authentication is required but not provided
   def request_authentication_error
-    render json: { error: 'Unauthorized' }, status: :unauthorized
+    render json: { error: "Unauthorized" }, status: :unauthorized
   end
 
   # Ensures authentication is required unless skipped via `allow_unauthenticated_access`
@@ -51,7 +53,7 @@ module Authentication
 
   # Extract token from Authorization header
   def extract_token_from_request
-    request.headers['Authorization']&.split(' ')&.last
+    request.headers["Authorization"]&.split(" ")&.last
   end
 
   # Check if the session has expired
