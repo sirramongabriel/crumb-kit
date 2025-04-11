@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # app/models/crumb_kit/session.rb
 class Session < ApplicationRecord
   include Authentication
@@ -17,7 +19,7 @@ class Session < ApplicationRecord
     self.token = JwtService.encode(payload)
   rescue StandardError => e
     Rails.logger.error "Error generating session token: #{e.message}"
-    errors.add(:base, 'Failed to generate session token.')
+    errors.add(:base, "Failed to generate session token.")
     throw :abort # No session created
   end
 
@@ -25,7 +27,7 @@ class Session < ApplicationRecord
     self.refresh_token = SecureRandom.uuid
   rescue StandardError => e
     Rails.logger.error "Error generating refresh token: #{e.message}"
-    errors.add(:base, 'Failed to generate refresh token.')
+    errors.add(:base, "Failed to generate refresh token.")
     throw :abort # No session created
   end
 
@@ -35,7 +37,7 @@ class Session < ApplicationRecord
     self.expires_at = 1.hour.from_now
   rescue StandardError => e
     Rails.logger.error "Error setting session expiration: #{e.message}"
-    errors.add(:base, 'Failed to set session expiration.')
+    errors.add(:base, "Failed to set session expiration.")
     throw :abort # No session created
   end
 end

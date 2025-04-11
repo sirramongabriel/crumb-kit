@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # app/models/crumb_kit/current.rb
 class Current < ActiveSupport::CurrentAttributes
   attribute :session

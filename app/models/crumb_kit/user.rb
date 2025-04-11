@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # app/models/crumb_kit/user.rb
 class User < ApplicationRecord
   has_secure_password
@@ -15,13 +17,13 @@ class User < ApplicationRecord
   has_many :comments, as: :commentable # retaining comments from former users may provide value
   has_many :media_attachments, as: :attachable
   has_many :events
-  has_many :owned_venues, class_name: 'Venue', foreign_key: 'user_id'
+  has_many :owned_venues, class_name: "Venue", foreign_key: "user_id"
   has_many :reservations
 
   # Reviews written by the user about other users
-  has_many :written_reviews, as: :reviewable, class_name: 'Review', foreign_key: :reviewer_id
+  has_many :written_reviews, as: :reviewable, class_name: "Review", foreign_key: :reviewer_id
   # Reviews received by the user from other users
-  has_many :received_reviews, as: :reviewable, class_name: 'Review', foreign_key: :reviewee_id
+  has_many :received_reviews, as: :reviewable, class_name: "Review", foreign_key: :reviewee_id
   # All reviews associated with the user (polymorphic)
   has_many :reviews, as: :reviewable
 
@@ -30,8 +32,8 @@ class User < ApplicationRecord
   validates :email, uniqueness: { case_sensitive: false }
   validates :username, length: { minimum: 3, maximum: 50 }
 
-  scope :given, -> { where(reviewable_type: 'given') }
-  scope :received, -> { where(reviewable_type: 'received') }
+  scope :given, -> { where(reviewable_type: "given") }
+  scope :received, -> { where(reviewable_type: "received") }
 
   def generate_full_name_slug
     self.name_slug = "#{first_name.downcase}-#{last_name.downcase}"
