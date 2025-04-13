@@ -1,5 +1,8 @@
 ## [Unreleased]
 
+## [0.0.6] - 2025-04-11
+* Added the pg gem to the Gemfile for PostgreSQL support.
+
 ## [0.0.5] - 2025-04-11
 * Removed an unnecessary comment from the spec/spec_helper.rb file.
 * Enforced the use of frozen string literals in several Ruby files.
