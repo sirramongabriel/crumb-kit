@@ -23,15 +23,15 @@ jobs:
       with:
         ruby-version: ${{ matrix.ruby }}
         bundler-cache: true
-     - name: Set up PostgreSQL service
+    - name: Set up PostgreSQL service
       services:
         postgres:
           image: postgres:13
           ports: ['5432:5432']
           env:
-            POSTGRES_USER: crumb_kit_user_test 
-            POSTGRES_PASSWORD: test_password 
-            POSTGRES_DB: crumb_kit_test     
+            POSTGRES_USER: crumb_kit_user_test
+            POSTGRES_PASSWORD: test_password
+            POSTGRES_DB: crumb_kit_test
           options: >-
             --health-cmd pg_isready --interval 10s --timeout 5s --retries 5
     - name: Run the default task
