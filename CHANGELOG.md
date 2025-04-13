@@ -1,5 +1,8 @@
 ## [Unreleased]
 
+## [0.0.7] - 2025-04-13
+* Refactored RuboCop configuration to enforce single quotes for string literals and compact class/module children.
+
 ## [0.0.6] - 2025-04-11
 * Added the pg gem to the Gemfile for PostgreSQL support.
 
