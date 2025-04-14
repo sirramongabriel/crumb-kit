@@ -1,9 +1,30 @@
 # frozen_string_literal: true
 
-require "crumb_kit"
-require "active_record"
+require 'rails'
+require 'rails/railtie'
+require 'active_support'
+require 'active_support/core_ext/string/inflections'
 
-ActiveRecord::Base.establish_connection(adapter: "sqlite3", database: ":memory:")
+# Define a minimal Rails application for testing
+class DummyApp::Application < Rails::Application
+  config.root = File.expand_path('dummy', __dir__) # Ensure this directory exists in your spec folder
+  config.eager_load_paths << File.expand_path('../../lib', __dir__) # Add your engine's lib directory to eager load paths
+end
+
+# Initialize the dummy app
+DummyApp::Application.initialize!
+
+require 'crumb_kit'
+require 'active_record'
+
+ActiveRecord::Base.establish_connection(
+  adapter: 'postgresql',
+  database: ENV['TEST_DATABASE'] || 'crumb-kit_test',
+  username: ENV['TEST_USERNAME'] || 'crumb_kit_user_test',
+  password: ENV['TEST_PASSWORD'],
+  host: ENV['TEST_HOST'] || 'localhost',
+  port: ENV['TEST_PORT'] || 5432
+)
 
 ActiveRecord::Schema.define do # rubocop:disable Metrics/BlockLength
   create_table :users do |t|
@@ -19,7 +40,7 @@ ActiveRecord::Schema.define do # rubocop:disable Metrics/BlockLength
     t.integer :rating
     t.datetime :created_at, null: false
     t.datetime :updated_at, null: false
-    t.index ["email"], name: "index_users_on_email", unique: true
+    t.index ['email'], name: 'index_users_on_email', unique: true
   end
 
   create_table :sessions do |t|
@@ -37,7 +58,7 @@ ActiveRecord::Schema.define do # rubocop:disable Metrics/BlockLength
     t.datetime :last_accessed_at
     t.datetime :created_at, null: false
     t.datetime :updated_at, null: false
-    t.index ["user_id"], name: "index_sessions_on_user_id"
+    t.index ['user_id'], name: 'index_sessions_on_user_id'
   end
 
   # Add other table definitions as needed (e.g., addresses, roles, user_roles)
@@ -45,7 +66,7 @@ end
 
 RSpec.configure do |config|
   # Enable flags like --only-failures and --next-failure
-  config.example_status_persistence_file_path = ".rspec_status"
+  config.example_status_persistence_file_path = '.rspec_status'
 
   # Disable RSpec exposing methods globally on `Module` and `main`
   config.disable_monkey_patching!
