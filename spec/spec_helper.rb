@@ -18,7 +18,7 @@ end
 
 require 'crumb_kit'
 
-CrumbKitTestApp.initialize!
+CrumbKitTestApp.instance.initialize!
 
 require 'active_record'
 require 'shoulda/matchers'
