@@ -5,8 +5,8 @@ require 'rails/railtie'
 require 'active_support'
 require 'active_support/core_ext/string/inflections'
 
-# Define a minimal Rails application for testing
-class CrumbKitTestApp < Rails::Application
+# Define a minimal Rails engine for testing
+class CrumbKitTestApp < Rails::Engine
   config.root = File.expand_path('dummy', __dir__) # Ensure this directory exists in your spec folder
   engine_root = File.expand_path('../../', __dir__)
   config.eager_load_paths << File.join(engine_root, 'lib')
