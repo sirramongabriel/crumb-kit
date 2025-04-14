@@ -8,7 +8,9 @@ require 'active_support/core_ext/string/inflections'
 # Define a minimal Rails application for testing
 class CrumbKitTestApp < Rails::Application
   config.root = File.expand_path('dummy', __dir__) # Ensure this directory exists in your spec folder
-  config.eager_load_paths << File.expand_path('../../app/models', __dir__) # Add engine's lib directory to eager load paths
+  engine_root = File.expand_path('../../', __dir__)
+  config.eager_load_paths << File.join(engine_root, 'lib')
+  config.eager_load_paths << File.join(engine_root, 'app', 'models')
 end
 
 CrumbKitTestApp.initialize!
