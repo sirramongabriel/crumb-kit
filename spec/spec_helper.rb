@@ -11,11 +11,13 @@ class CrumbKitTestApp < Rails::Application
   engine_root = File.expand_path('../../', __dir__)
   config.eager_load_paths << File.join(engine_root, 'lib')
   config.eager_load_paths << File.join(engine_root, 'app', 'models')
+  config.eager_load = false
 end
+
+require 'crumb_kit'
 
 CrumbKitTestApp.initialize!
 
-require 'crumb_kit'
 require 'active_record'
 require 'shoulda/matchers'
 
