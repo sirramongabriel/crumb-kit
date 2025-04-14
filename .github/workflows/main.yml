@@ -26,16 +26,6 @@ jobs:
     - name: Set up PostgreSQL service
       run: |
         echo "Setting up PostgreSQL service..."
-    services:
-      postgres:
-        image: postgres:13
-        ports: ['5432:5432']
-        env:
-          POSTGRES_USER: crumb_kit_user_test
-          POSTGRES_PASSWORD: test_password
-          POSTGRES_DB: crumb_kit_test
-        options: >-
-          --health-cmd pg_isready --interval 10s --timeout 5s --retries 5
     - name: Run the default task
       run: bundle exec rake
       env:
@@ -46,3 +36,13 @@ jobs:
         TEST_HOST: localhost
         TEST_PORT: 5432
         CI: true
+    services:
+      postgres:
+        image: postgres:13
+        ports: ['5432:5432']
+        env:
+          POSTGRES_USER: crumb_kit_user_test
+          POSTGRES_PASSWORD: test_password
+          POSTGRES_DB: crumb_kit_test
+        options: >-
+          --health-cmd pg_isready --interval 10s --timeout 5s --retries 5
