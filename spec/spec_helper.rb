@@ -6,13 +6,12 @@ require 'active_support'
 require 'active_support/core_ext/string/inflections'
 
 # Define a minimal Rails application for testing
-class DummyApp::Application < Rails::Application
+class CrumbKitTestApp < Rails::Application
   config.root = File.expand_path('dummy', __dir__) # Ensure this directory exists in your spec folder
-  config.eager_load_paths << File.expand_path('../../lib', __dir__) # Add your engine's lib directory to eager load paths
+  config.eager_load_paths << File.expand_path('../../lib', __dir__) # Add engine's lib directory to eager load paths
 end
 
-# Initialize the dummy app
-DummyApp::Application.initialize!
+CrumbKitTestApp.initialize!
 
 require 'crumb_kit'
 require 'active_record'
