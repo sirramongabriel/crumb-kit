@@ -4,7 +4,7 @@
 # Represents a user in the CrumbLit authentication system.
 # Includes functionality for authentication, session handling,
 # email normalization, and password reset.
-class CrumbLit::User < ApplicationRecord
+class CrumbKit::User < ApplicationRecord
   has_secure_password
 
   before_save :generate_full_name, :generate_full_name_slug, :sanitize_email
