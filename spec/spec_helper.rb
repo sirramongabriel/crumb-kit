@@ -15,6 +15,7 @@ CrumbKitTestApp.initialize!
 
 require 'crumb_kit'
 require 'active_record'
+require 'shoulda/matchers'
 
 ActiveRecord::Base.establish_connection(
   adapter: 'postgresql',
