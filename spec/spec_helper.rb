@@ -11,6 +11,7 @@ class CrumbKitTestApp < Rails::Engine
   engine_root = File.expand_path('../../', __dir__)
   config.eager_load_paths << File.join(engine_root, 'lib')
   config.eager_load_paths << File.join(engine_root, 'app', 'models')
+  config.autoload_paths << File.join(engine_root, 'app', 'models')
   config.eager_load = false
   config.middleware.use ActionDispatch::Cookies
   config.middleware.use ActionDispatch::Session::CookieStore, key: '_crumb_kit_session'
