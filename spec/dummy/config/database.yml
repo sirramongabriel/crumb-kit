@@ -1,0 +1,21 @@
+default: &default
+  adapter: postgresql
+  encoding: unicode
+  database: crumb_kit_test
+  pool: 5
+  username: your_username
+  password: your_password
+  host: localhost
+  port: 5432
+
+development:
+  <<: *default
+  database: crumb_kit_development
+
+test:
+  <<: *default
+  database: crumb_kit_test
+
+production:
+  <<: *default
+  database: crumb_kit_production
