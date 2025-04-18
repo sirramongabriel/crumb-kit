@@ -34,6 +34,7 @@ Gem::Specification.new do |spec|
   # Uncomment to register a new dependency of your gem
   # spec.add_dependency "example-gem", "~> 1.0"
   spec.add_dependency 'activerecord', '~> 8.0'
+  spec.add_dependency 'bcrypt', '~> 3.1'
   spec.add_dependency 'rails', '>= 7.0'
   spec.add_development_dependency 'bundler', '~> 2.5'
   spec.add_development_dependency 'rake', '~> 13.0'

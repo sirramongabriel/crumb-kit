@@ -12,3 +12,5 @@ gem 'rspec', '~> 3.12'
 gem 'rubocop', '~> 1.21'
 
 gem 'pg'
+
+gem 'rails'

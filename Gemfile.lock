@@ -3,6 +3,7 @@ PATH
   specs:
     crumb-kit (0.0.1)
       activerecord (~> 8.0)
+      bcrypt (~> 3.1)
       rails (>= 7.0)
 
 GEM
@@ -81,6 +82,7 @@ GEM
       uri (>= 0.13.1)
     ast (2.4.3)
     base64 (0.2.0)
+    bcrypt (3.1.20)
     benchmark (0.4.0)
     bigdecimal (3.1.9)
     builder (3.3.0)
@@ -267,6 +269,7 @@ DEPENDENCIES
   bundler (~> 2.5)
   crumb-kit!
   pg
+  rails
   rake (~> 13.0)
   rspec (~> 3.12)
   rspec-rails
