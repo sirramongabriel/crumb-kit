@@ -34,6 +34,18 @@ rescue LoadError
   exit 1
 end
 
+# Explicitly require models from the gem's app/models directory.
+# Autoloading might not be triggered early enough during spec file loading.
+begin
+  require_relative '../app/models/crumb_kit/user'
+  require_relative '../app/models/crumb_kit/session'
+  require_relative '../app/models/crumb_kit/current' # Assuming CrumbKit::Current is defined here
+rescue LoadError => e
+  puts "Error explicitly requiring gem models: #{e.message}"
+  puts e.backtrace.first(5) # Print a few lines of the backtrace
+  exit 1 # Exit if essential models can't be loaded
+end
+
 require 'crumb_kit'
 
 require 'active_record'
