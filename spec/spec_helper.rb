@@ -4,17 +4,34 @@ require 'rails'
 require 'rails/railtie'
 require 'active_support'
 require 'active_support/core_ext/string/inflections'
+require 'bundler/setup'
 
 # Define a minimal Rails engine for testing
 class CrumbKitTestApp < Rails::Engine
-  config.root = File.expand_path('dummy', __dir__) # Ensure this directory exists in your spec folder
+  config.root = File.expand_path('dummy', __dir__)
   engine_root = File.expand_path('../../', __dir__)
-  config.eager_load_paths << File.join(engine_root, 'lib')
+  # These lines configure the paths for the engine/dummy app to find your models, etc.
   config.eager_load_paths << File.join(engine_root, 'app', 'models')
   config.autoload_paths << File.join(engine_root, 'app', 'models')
-  config.eager_load = false
+  # Add other relevant app paths if you have controllers, services, etc. in app/
+  config.eager_load_paths << File.join(engine_root, 'app', 'controllers')
+  config.autoload_paths << File.join(engine_root, 'app', 'controllers')
+  config.eager_load_paths << File.join(engine_root, 'app', 'services')
+  config.autoload_paths << File.join(engine_root, 'app', 'services')
+
+  config.eager_load = false # Typically false for testing, relying on autoloading
   config.middleware.use ActionDispatch::Cookies
   config.middleware.use ActionDispatch::Session::CookieStore, key: '_crumb_kit_session'
+end
+
+# Boot the dummy Rails app environment.
+# This activates the engine's configured eager_load_paths and autoload_paths,
+# making files in app/models, app/controllers, etc. available via autoloading.
+begin
+  require File.expand_path('dummy/config/environment', __dir__)
+rescue LoadError
+  puts 'Could not load dummy application environment. Make sure spec/dummy is a valid Rails app.'
+  exit 1
 end
 
 require 'crumb_kit'
@@ -24,7 +41,7 @@ require 'shoulda/matchers'
 
 ActiveRecord::Base.establish_connection(
   adapter: 'postgresql',
-  database: ENV['TEST_DATABASE'] || 'crumb-kit_test',
+  database: ENV['TEST_DATABASE'] || 'crumb_kit_test',
   username: ENV['TEST_USERNAME'] || 'crumb_kit_user_test',
   password: ENV['TEST_PASSWORD'],
   host: ENV['TEST_HOST'] || 'localhost',

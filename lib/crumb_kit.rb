@@ -1,5 +1,9 @@
 # frozen_string_literal: true
 
+require_relative 'crumb_kit/version'
+require_relative 'crumb_kit/concerns/authentication'
+require_relative 'crumb_kit/jwt'
+
 # CrumbKit::Engine integrates CrumbKit gem into a Rails application.
 # It allows the host app to customize configurations such as the session model.
 #
