@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'bcrypt'
+
 require 'rails'
 require 'rails/railtie'
 require 'active_support'
