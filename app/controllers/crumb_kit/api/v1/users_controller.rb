@@ -1,11 +1,11 @@
 # frozen_string_literal: true
 
 # app/controllers/crumb_kit/api/v1/users_controller.rb
-class Api::V1::UsersController < ApplicationController # rubocop:disable Metrics/ClassLength
+class Api::V1::UsersController < ApplicationController
   before_action :allow_unauthenticated_access, only: %i[create me]
   before_action :set_user, only: %i[show update destroy]
 
-  def index # rubocop:disable Metrics/MethodLength
+  def index
     @users = User.all
     render json: {
       status: {
@@ -13,23 +13,19 @@ class Api::V1::UsersController < ApplicationController # rubocop:disable Metrics
         message: 'Users'
       },
       data: {
-        user: @user,
-        user_address: @user.address,
-        user_roles: @user.user_roles
+        user: @user
       }
     }
   end
 
-  def show # rubocop:disable Metrics/MethodLength
+  def show
     render json: {
       status: {
         code: 200,
         message: 'User Page'
       },
       data: {
-        user: @user,
-        user_address: @user.address,
-        user_roles: @user.user_roles
+        user: @user
       }
     }
   end
@@ -38,7 +34,6 @@ class Api::V1::UsersController < ApplicationController # rubocop:disable Metrics
     @user = User.new(user_params)
 
     if @user.save
-      handle_user_roles
       session = @user.sessions.create
       jwt = session.generate_token
       refresh_token = session.generate_refresh_token
@@ -55,9 +50,7 @@ class Api::V1::UsersController < ApplicationController # rubocop:disable Metrics
         },
         data: {
           jwt: jwt,
-          user: @user,
-          user_address: @user.address,
-          user_roles: @user.user_roles
+          user: @user
         }
       }, status: :created
     else
@@ -82,9 +75,7 @@ class Api::V1::UsersController < ApplicationController # rubocop:disable Metrics
           message: 'User updated successfully'
         },
         data: {
-          user: @user,
-          user_address: @user.address,
-          user_roles: @user.user_roles
+          user: @user
         }
       }
     else
@@ -99,55 +90,16 @@ class Api::V1::UsersController < ApplicationController # rubocop:disable Metrics
 
   private
 
-  def handle_user_roles # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
-    user_roles_attributes = params[:user][:user_roles_attributes]
-    return unless user_roles_attributes.present?
-
-    user_roles_attributes.each do |role_data|
-      role_id = role_data[:role_id]
-
-      role = Role.find_by(id: role_id)
-      unless role
-        Rails.logger.warn "Role with ID #{role_id} not found."
-        @user.errors.add(:base, "Error: Role with ID '#{role_id}' not found.")
-        next
-      end
-
-      user_role = @user.user_roles.build(role_id: role.id)
-      unless user_role.save
-        Rails.logger.error "Error saving user role: #{user_role.errors.full_messages.join(", ")}"
-        @user.errors.add(:base, 'Error assigning role.')
-      end
-    end
-  end
-
-  def role_selection_is_mandatory?
-    # Role selection is mandatory
-    true
-  end
-
   def set_user
     @user = User.find(params[:id])
   end
 
-  def user_params # rubocop:disable Metrics/MethodLength
+  def user_params
     params.require(:user).permit(
       :first_name,
       :last_name,
       :email,
-      :password,
-      :profile_picture,
-      :rating,
-      :username,
-      address_attributes: %i[
-        street
-        city
-        state
-        zip
-      ],
-      user_roles_attributes: %i[
-        role_id
-      ]
+      :password
     )
   end
 end
