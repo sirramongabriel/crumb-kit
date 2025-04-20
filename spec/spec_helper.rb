@@ -58,6 +58,7 @@ require 'database_cleaner'
 ActiveRecord::Base.establish_connection(
   adapter: 'postgresql',
   database: ENV['TEST_DATABASE'] || 'crumb_kit_test',
+  username: ENV['TEST_USERNAME'],
   password: ENV['TEST_PASSWORD'],
   host: ENV['TEST_HOST'] || 'localhost',
   port: ENV['TEST_PORT'] || 5432
