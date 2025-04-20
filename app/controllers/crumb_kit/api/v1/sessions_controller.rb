@@ -101,9 +101,7 @@ class Api::V1::SessionsController < ApplicationController # rubocop:disable Metr
       data: {
         jwt: new_session_data[:jwt],
         expires_at: new_session_data[:expires_at],
-        user: user,
-        user_address: user.address,
-        user_roles: user.user_roles
+        user: user
       }
     }, status: :ok
   rescue JWT::DecodeError => e
@@ -117,17 +115,14 @@ class Api::V1::SessionsController < ApplicationController # rubocop:disable Metr
     render json: { error: 'Internal server error' }, status: :internal_server_error
   end
 
-  def me # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
+  def me # rubocop:disable Metrics/MethodLength
     if current_user
       puts "User first_name: #{current_user.first_name}"
       user_data = {
         id: current_user.id,
         first_name: current_user.first_name,
         last_name: current_user.last_name,
-        email: current_user.email,
-        username: current_user.username || nil,
-        user_address: current_user.address || nil,
-        user_roles: current_user.user_roles
+        email: current_user.email
       }
       render json: user_data, status: :ok
     else
