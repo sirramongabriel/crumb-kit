@@ -3,8 +3,8 @@ default: &default
   encoding: unicode
   database: crumb_kit_test
   pool: 5
-  username: your_username
-  password: your_password
+  username: crumb_kit_user_test
+  password: password
   host: localhost
   port: 5432
 
