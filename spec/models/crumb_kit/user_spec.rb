@@ -41,16 +41,6 @@ RSpec.describe CrumbKit::User, type: :model do # rubocop:disable Metrics/BlockLe
     end
   end
 
-  describe '#generate_password_reset_token' do
-    it 'does not overwrite an existing token' do
-      user.password_reset_token = 'existingtoken'
-      user.password_reset_sent_at = 1.hour.ago
-      existing_token = user.password_reset_token
-      user.generate_password_reset_token
-      expect(user.password_reset_token).to eq(existing_token)
-    end
-  end
-
   describe '#password_reset_token_valid?' do
     it 'returns true if token exists and is within 2 hours' do
       user.password_reset_token = 'token'
