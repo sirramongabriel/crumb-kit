@@ -39,6 +39,7 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'bundler', '~> 2.5'
   spec.add_development_dependency 'rake', '~> 13.0'
 
+  spec.add_development_dependency 'database_cleaner'
   spec.add_development_dependency 'rspec', '~> 3.12'
   spec.add_development_dependency 'rspec-rails'
   spec.add_development_dependency 'shoulda-matchers', '~> 5.0'
