@@ -1,7 +1,9 @@
+# frozen_string_literal: true
+
 # spec/models/crumb_kit/user_spec.rb
 require 'spec_helper'
 
-RSpec.describe CrumbKit::User, type: :model do
+RSpec.describe CrumbKit::User, type: :model do # rubocop:disable Metrics/BlockLength
   subject(:user) do
     described_class.new(
       email: 'TEST@Email.COM',
