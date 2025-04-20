@@ -36,7 +36,7 @@ rescue LoadError
   exit 1
 end
 
-# Explicitly require models from the gem's app/models directory.
+# --- ADDED BACK: Explicitly require models from the gem's app/models directory. ---
 # Autoloading might not be triggered early enough during spec file loading.
 begin
   require_relative '../app/models/crumb_kit/user'
@@ -47,57 +47,61 @@ rescue LoadError => e
   puts e.backtrace.first(5) # Print a few lines of the backtrace
   exit 1 # Exit if essential models can't be loaded
 end
+# --- END ADDED BACK ---
 
 require 'crumb_kit'
 
 require 'active_record'
 require 'shoulda/matchers'
+require 'database_cleaner'
 
 ActiveRecord::Base.establish_connection(
   adapter: 'postgresql',
   database: ENV['TEST_DATABASE'] || 'crumb_kit_test',
-  username: ENV['TEST_USERNAME'] || 'crumb_kit_user_test',
   password: ENV['TEST_PASSWORD'],
   host: ENV['TEST_HOST'] || 'localhost',
   port: ENV['TEST_PORT'] || 5432
 )
 
-ActiveRecord::Schema.define do # rubocop:disable Metrics/BlockLength
-  create_table :users do |t|
-    t.string :first_name, null: false
-    t.string :last_name, null: false
-    t.string :username, null: false
-    t.string :name_slug
-    t.string :email, null: false
-    t.string :password_digest, null: false
-    t.string :password_reset_token
-    t.datetime :password_reset_sent_at
-    t.string :profile_picture
-    t.integer :rating
-    t.datetime :created_at, null: false
-    t.datetime :updated_at, null: false
-    t.index ['email'], name: 'index_users_on_email', unique: true
-  end
+# Define the database schema for tests
+# This block will run once when spec_helper is loaded.
+# DatabaseCleaner will handle cleaning data within this schema.
 
-  create_table :sessions do |t|
-    t.datetime :expires_at
-    t.string :ip_address
-    t.string :user_agent
-    t.string :token
-    t.string :refresh_token
-    t.bigint :user_id
-    t.boolean :remember_me, default: false
-    t.datetime :revoked_at
-    t.string :location
-    t.string :device_id
-    t.datetime :extended_at
-    t.datetime :last_accessed_at
-    t.datetime :created_at, null: false
-    t.datetime :updated_at, null: false
-    t.index ['user_id'], name: 'index_sessions_on_user_id'
-  end
+unless ActiveRecord::Base.connection.table_exists?('users')
+  ActiveRecord::Schema.define do # rubocop:disable Metrics/BlockLength
+    drop_table :sessions if ActiveRecord::Base.connection.table_exists?('sessions')
+    drop_table :users if ActiveRecord::Base.connection.table_exists?('users')
 
-  # Add other table definitions as needed (e.g., addresses, roles, user_roles)
+    create_table :users do |t|
+      t.string :first_name, null: false
+      t.string :last_name, null: false
+      t.string :name_slug
+      t.string :email, null: false
+      t.string :password_digest, null: false
+      t.string :password_reset_token
+      t.datetime :password_reset_sent_at
+      t.datetime :created_at, null: false
+      t.datetime :updated_at, null: false
+      t.index ['email'], name: 'index_users_on_email', unique: true
+    end
+
+    create_table :sessions do |t|
+      t.datetime :expires_at
+      t.string :ip_address
+      t.string :user_agent
+      t.string :token
+      t.string :refresh_token
+      t.bigint :user_id
+      t.boolean :remember_me, default: false
+      t.datetime :revoked_at
+      t.string :location
+      t.string :device_id
+      t.datetime :extended_at
+      t.datetime :last_accessed_at
+      t.datetime :created_at, null: false
+      t.datetime :updated_at, null: false
+    end
+  end
 end
 
 RSpec.configure do |config|
@@ -116,6 +120,20 @@ RSpec.configure do |config|
       with.test_framework :rspec
       with.library :active_model
       with.library :active_record
+    end
+  end
+
+  # Database Cleaner configuration (assuming you use it for data cleaning between tests)
+  # Make sure 'database_cleaner' gem is in your Gemfile (likely under development group)
+  config.before(:suite) do
+    DatabaseCleaner.strategy = :transaction
+    # If you need to clean the schema itself before the suite (e.g., if not using Schema.define every time)
+    # DatabaseCleaner.clean_with(:truncation)
+  end
+
+  config.around(:each) do |example|
+    DatabaseCleaner.cleaning do
+      example.run
     end
   end
 end
