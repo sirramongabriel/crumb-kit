@@ -13,7 +13,7 @@ class SessionService
   end
 
   # Sets the JWT and refresh token in cookies
-  def set_cookies(jwt, refresh_token, cookies)
+  def set_cookies(jwt, refresh_token, cookies) # rubocop:disable Metrics/MethodLength
     cookies.signed[:jwt] = {
       value: jwt,
       httponly: true,
